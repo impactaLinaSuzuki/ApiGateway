@@ -1,0 +1,24 @@
+spring:
+    jpa:
+        defer-datasource-initialization: true
+        properties.hibernate.dialect: org.hibernate.dialect.SQLServer2012Dialect
+        hibernate.ddl-auto: create-drop
+    datasource:
+        url: jdbc:sqlserver://localhost\SQLEXPRESS;databaseName=GatewayApi2;trustServerCertificate=true;createDatabaseIfNotExist=true
+        username: sa
+        password: 123
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        plataform: sqlserver
+        show-sql: true
+        
+
+#createDatabaseIfNotExist: true
+# mvc:
+#     patchmatch:
+#         matching-strategy: ant_path_matcher
+server:
+    port: 8080
+
+logging.level.org.hibernate:
+    SQL: DEBUG
+    type.descriptor.sql.BasicBinder: TRACE
