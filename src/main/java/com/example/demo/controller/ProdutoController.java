@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +67,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/getProductByCode")
-    public ResponseEntity<Produto> getProductByCode(@PathVariable(value = "productCode") String productCode){
+    public ResponseEntity<Produto> getProductByCode(@PathParam(value = "productCode") String productCode){
         Produto produto = _ProdutRepository.findByCodigo(productCode);
 
         return ResponseEntity.ok().body(produto);
