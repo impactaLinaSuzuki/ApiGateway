@@ -1,11 +1,16 @@
 package com.example.demo.model;
 
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity(name = "Componente")
@@ -34,15 +39,15 @@ public class Componente {
     @Column(name = "Quantidade", nullable = true)
     private int quantidade;
 
-    // @ManyToMany(mappedBy = "componentes")
-    // private Set<Produto> produtos = new HashSet<>();
+    @OneToMany(mappedBy = "componente")
+    private Set<ProdutoComponente> produtos = new HashSet<>();
 
     public Componente() {
         super();
     }
 
     public Componente(
-        int id, 
+        // int id, 
         String codigo, 
         int indice, 
         String sku, 
@@ -52,7 +57,7 @@ public class Componente {
         //,Set<Produto> _produtos
         ) 
     {
-        this.id = id;
+        // this.id = id;
         this.codigo = codigo;
         this.indice = indice;
         this.sku = sku;
@@ -126,4 +131,16 @@ public class Componente {
     //     this.produtos = produtos;
     // }
     
+     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProdutoComponente that = (ProdutoComponente) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

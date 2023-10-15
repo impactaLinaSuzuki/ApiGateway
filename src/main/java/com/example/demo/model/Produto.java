@@ -1,10 +1,15 @@
 package com.example.demo.model;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -16,11 +21,14 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "Codigo", nullable =  true)
+    @Column(name = "Codigo", nullable =  false)
     private String codigo;
 
-    @Column(name = "Nome", nullable =  true)
+    @Column(name = "Nome", nullable =  false)
     private String nome;
+
+    @OneToMany(mappedBy = "produto")
+    private Set<ProdutoComponente> componentes = new HashSet<>();
 
     // @ManyToMany(cascade = CascadeType.ALL)
     // @JoinTable(name = "produto_componente",
@@ -36,13 +44,13 @@ public class Produto {
     }
 
     public Produto(
-        int id,
+        // int id,
         String codigo, 
         String nome
         //,Set<Componente> _componentes
         ) 
     {
-        this.id = id;
+        // this.id = id;
         this.codigo = codigo;
         this.nome = nome;
         //this.componentes = _componentes;
@@ -72,13 +80,18 @@ public class Produto {
         this.nome = nome;
     }
 
-    // public Set<Componente> getComponentes() {
-    //     return componentes;
-    // }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProdutoComponente that = (ProdutoComponente) o;
+        return Objects.equals(id, that.id);
+    }
 
-    // public void setComponentes(Set<Componente> componentes) {
-    //     this.componentes = componentes;
-    // }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     
 }

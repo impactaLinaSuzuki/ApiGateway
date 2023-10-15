@@ -1,11 +1,13 @@
 package com.example.demo.model;
 
+import java.util.Objects;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity(name = "ProdutoComponente")
@@ -16,23 +18,28 @@ public class ProdutoComponente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
 
-    @Column(name = "ProdutoId")
-    public int produtoId;
+    @ManyToOne
+    @JoinColumn(name = "ProdutoId")
+    public Produto produto;
 
+    @ManyToOne
+    @JoinColumn(name = "ComponenteId")
+    public Componente componente;
 
-    @Column(name = "ComponenteId")
-    public int componenteId;
+    // public Produto produto;
+
+    // public Componente componente;
 
     public ProdutoComponente() {
         super();
     }
 
     public ProdutoComponente(
-        int produtoId, 
-        int componenteId
+        Produto produto, 
+        Componente componente
        ) {
-        this.produtoId = produtoId;
-        this.componenteId = componenteId;
+        this.produto = produto;
+        this.componente = componente;
     }
 
     public int getId() {
@@ -43,20 +50,36 @@ public class ProdutoComponente {
         this.id = id;
     }
 
-    public int getProdutoId() {
-        return produtoId;
+    public Produto getProduto() {
+        return produto;
     }
 
-    public void setProdutoId(int produtoId) {
-        this.produtoId = produtoId;
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 
-    public int getComponenteId() {
-        return componenteId;
+    public Componente getComponente() {
+        return componente;
     }
 
-    public void setComponenteId(int componenteId) {
-        this.componenteId = componenteId;
+    public void setComponente(Componente componente) {
+        this.componente = componente;
     } 
     
+     @Override
+    public boolean equals(Object o) {
+        if (this == o) 
+            return true;
+
+        if (o == null || getClass() != o.getClass()) 
+            return false;
+            
+        ProdutoComponente that = (ProdutoComponente) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
