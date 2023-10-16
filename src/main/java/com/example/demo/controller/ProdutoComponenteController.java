@@ -21,6 +21,7 @@ import com.example.demo.repository.ProdutoComponenteRepository;
 import com.example.demo.repository.ProdutoRepository;
 import com.example.demo.service.ApplicationService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 
@@ -66,6 +67,7 @@ public class ProdutoComponenteController {
     // }
 
     @PostMapping("/produtoComponente/create")
+    @Operation(summary = "Create product and component and add component in product")
     public ResponseEntity<ProdutoComponente> createProdutoComponente(
         @RequestBody ProdutoComponente produtoComponente)
     {
@@ -77,6 +79,7 @@ public class ProdutoComponenteController {
     }
 
     @GetMapping("/produtoComponente/get")
+    @Operation(summary = "Get productComponent by id")
     public ResponseEntity<ProdutoComponente> GetProductById(
         @PathParam(value = "id") int productComponenteId)
     {
@@ -86,12 +89,14 @@ public class ProdutoComponenteController {
     }
 
     @GetMapping("/produtoComponente/getAll")
+    @Operation(summary = "Get all product and your components")
     public ResponseEntity<List<ProdutoComponente>> GetAll(){
         List<ProdutoComponente> produtoComponentes = _ProdutoComponenteRepository.findAll();
         return ResponseEntity.ok().body(produtoComponentes);
     }
 
     @DeleteMapping("/produtoComponente/delete")
+    @Operation(summary = "Delete a component of product")
     public ResponseEntity<String> Delete(@PathParam(value = "productComponenteId") int productComponenteId){
         _ProdutoComponenteRepository.deleteById(productComponenteId);
 
@@ -99,6 +104,7 @@ public class ProdutoComponenteController {
     }
 
     @PutMapping("/produtoComponente/update")
+    @Operation(summary = "Update product value, component value or/and relationship between entities")
     public ResponseEntity<ProdutoComponente> UpdateProduct(@RequestBody ProdutoComponente productComponente){
 
         ProdutoComponente alterProdutoComponente = new ProdutoComponente();
@@ -117,6 +123,7 @@ public class ProdutoComponenteController {
 
     
     @PostMapping(value = "/produto/{codigo}/componente")
+    @Operation(summary = "Add component in product")
     public ResponseEntity<ProdutoComponente> addComponentInProduct(@PathVariable String codigo, @RequestBody Componente componente){
         Produto produto = _ProdutoRepository.findByCodigo(codigo);
         ProdutoComponente produtoComponente = new ProdutoComponente(produto, componente);
@@ -127,6 +134,7 @@ public class ProdutoComponenteController {
     }
 
     @GetMapping(value = "/produto/{codigo}/componente/{indice}")
+    @Operation(summary = "Get product by code and your component by index")
     public ResponseEntity<List<ProdutoComponente>> findByProdCodAndIndex(
         @PathVariable String codigo, 
         @PathVariable int indice)
@@ -148,6 +156,7 @@ public class ProdutoComponenteController {
     }
 
     @GetMapping(value = "/produto/{codigo}/componente")
+    @Operation(summary = "Get all components by product code")
     public ResponseEntity<List<ProdutoComponente>> getComponentByProdCode(@PathVariable String codigo){
 
         List<ProdutoComponente> newProdutosComponentes = new ArrayList<ProdutoComponente>();
@@ -165,6 +174,7 @@ public class ProdutoComponenteController {
     }
 
     @GetMapping("produto/componente")
+    @Operation(summary = "Get produto and component by description component")
     public ResponseEntity<List<ProdutoComponente>> getComponentByDescription(@PathParam(value = "descricao") String descricao){
 
         List<ProdutoComponente> newProdutosComponentes = new ArrayList<ProdutoComponente>();

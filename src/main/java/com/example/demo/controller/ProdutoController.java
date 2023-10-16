@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Produto;
 import com.example.demo.repository.ProdutoRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 
@@ -25,6 +27,7 @@ public class ProdutoController {
     private ProdutoRepository _ProdutRepository;
 
     @PostMapping("/create")
+    @Operation(summary = "Create a new product")
     public ResponseEntity<Produto> CreateProduct(@RequestBody Produto produto){
         Produto newProduct = _ProdutRepository.save(produto);
          return ResponseEntity.ok().body(newProduct);
@@ -32,18 +35,21 @@ public class ProdutoController {
     }
 
     @GetMapping("/get")
+    @Operation(summary = "Get product by id")
     public ResponseEntity<Produto> GetProductById(@PathParam(value = "id") int productId){
         Produto foundProduct = _ProdutRepository.findById(productId).get();
         return ResponseEntity.ok().body(foundProduct);
     }
 
     @GetMapping("/getAll")
+    @Operation(summary = "Get all products")
     public ResponseEntity<List<Produto>> GetAll(){
         List<Produto> produtos = _ProdutRepository.findAll();
         return ResponseEntity.ok().body(produtos);
     }
 
     @DeleteMapping("/delete")
+    @Operation(summary = "Delete product")
     public ResponseEntity<String> Delete(@PathParam(value = "productId") int productId){
         _ProdutRepository.deleteById(productId);
 
@@ -51,6 +57,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/update")
+    @Operation(summary = "Update product")
     public ResponseEntity<Produto> UpdateProduct(@RequestBody Produto produto){
 
         Produto alterProduto = new Produto();
@@ -67,6 +74,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/getProductByCode")
+    @Operation(summary = "Get produto by product code")
     public ResponseEntity<Produto> getProductByCode(@PathParam(value = "productCode") String productCode){
         Produto produto = _ProdutRepository.findByCodigo(productCode);
 
