@@ -19,6 +19,7 @@ import com.example.demo.model.Produto;
 import com.example.demo.model.ProdutoComponente;
 import com.example.demo.repository.ProdutoComponenteRepository;
 import com.example.demo.repository.ProdutoRepository;
+import com.example.demo.service.ApplicationService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
@@ -31,29 +32,51 @@ public class ProdutoComponenteController {
     @Autowired
     private ProdutoRepository _ProdutoRepository;
 
+    // @Autowired
+    // private ComponenteRepository _ComponenteRepository;
+
     @Autowired
     private ProdutoComponenteRepository _ProdutoComponenteRepository;
 
+    @Autowired
+    private ApplicationService _ApplicationService;
+
     public ProdutoComponenteController(
         ProdutoRepository produtoRepository,
-        ProdutoComponenteRepository produtoComponenteRepository) {
+        ProdutoComponenteRepository produtoComponenteRepository,
+        ApplicationService applicationService) {
         this._ProdutoRepository = produtoRepository;
         this._ProdutoComponenteRepository = produtoComponenteRepository;
+        this._ApplicationService = applicationService;
     }
+
+    // @PostMapping("/produtoComponente/create")
+    // public ResponseEntity<ProdutoComponente> createProdutoComponente(
+    //     @RequestBody Produto produto, 
+    //     @RequestBody Componente componente)
+    // {
+    //     _ProdutoRepository.save(produto);
+    //     _ComponenteRepository.save(componente);
+
+    //     ProdutoComponente produtoComponente = new ProdutoComponente(produto, componente);
+
+    //     produtoComponente = _ProdutoComponenteRepository.save(produtoComponente);
+
+    //     return ResponseEntity.ok().body(produtoComponente);
+    // }
 
     @PostMapping("/produtoComponente/create")
     public ResponseEntity<ProdutoComponente> createProdutoComponente(
-        @PathParam(value = "{produto}") Produto produto, 
-        @PathParam(value = "{componente}") Componente componente)
+        @RequestBody ProdutoComponente produtoComponente)
     {
-        ProdutoComponente produtoComponente = new ProdutoComponente(produto, componente);
+        _ApplicationService.Save(produtoComponente.getProduto(), produtoComponente.getComponente());
 
         produtoComponente = _ProdutoComponenteRepository.save(produtoComponente);
 
         return ResponseEntity.ok().body(produtoComponente);
     }
 
-    @PostMapping("/produtoComponente/get")
+    @GetMapping("/produtoComponente/get")
     public ResponseEntity<ProdutoComponente> GetProductById(
         @PathParam(value = "id") int productComponenteId)
     {
@@ -113,8 +136,9 @@ public class ProdutoComponenteController {
         List<ProdutoComponente> produtosComponentes = _ProdutoComponenteRepository.findAll().stream().toList();
 
         for (ProdutoComponente produtoComponente : produtosComponentes) {
-            if(produtoComponente.getProduto().getCodigo() == codigo &&
-             produtoComponente.getComponente().getIndice() == indice)
+            
+            if( produtoComponente.getProduto().getCodigo().equals(codigo) &&
+                produtoComponente.getComponente().getIndice() == indice)
             {
                 newProdutoComponentes.add(produtoComponente);
             }
@@ -140,15 +164,15 @@ public class ProdutoComponenteController {
         return ResponseEntity.ok().body(newProdutosComponentes);
     }
 
-    @GetMapping(value = "produto/componente?descricao={descricao}")
-    public ResponseEntity<List<ProdutoComponente>> getComponentByDescription(@PathVariable String descricao){
+    @GetMapping("produto/componente")
+    public ResponseEntity<List<ProdutoComponente>> getComponentByDescription(@PathParam(value = "descricao") String descricao){
 
         List<ProdutoComponente> newProdutosComponentes = new ArrayList<ProdutoComponente>();
 
         List<ProdutoComponente> produtosComponentes = _ProdutoComponenteRepository.findAll().stream().toList();
 
         for (ProdutoComponente produtoComponente : produtosComponentes) {
-            if(produtoComponente.getComponente().getDescricao() != descricao){
+            if(produtoComponente.getComponente().getDescricao().equalsIgnoreCase(descricao)){
                 newProdutosComponentes.add(produtoComponente);
             }
         }
